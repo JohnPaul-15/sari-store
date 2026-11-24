@@ -1,0 +1,422 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+
+<style>
+  :root {
+    --mcd-red: #DA291C;
+    --mcd-dark-red: #B71C1C;
+    --mcd-yellow: #FFC72C;
+    --dash-ink: #272320;
+    --dash-muted: #6E6761;
+    --neu-bg: #F4EFE8;
+    --neu-dark: #D6CFC4;
+    --neu-light: #FFFFFF;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--neu-bg);
+    color: var(--dash-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main.container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 30px 20px 56px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  /* Page Title */
+  main.container > h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: var(--mcd-red);
+    text-shadow: 1px 1px 0 var(--neu-light);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  main.container > h1 img {
+    padding: 6px;
+    border-radius: 14px;
+    background: var(--neu-bg);
+    box-shadow:
+      5px 5px 10px var(--neu-dark),
+      -5px -5px 10px var(--neu-light);
+  }
+
+  /* KPI Stat Cards Row */
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 22px;
+  }
+
+  .stat-card {
+    background: var(--neu-bg);
+    border-radius: 24px;
+    padding: 24px 26px;
+    box-sizing: border-box;
+    box-shadow:
+      12px 12px 24px var(--neu-dark),
+      -12px -12px 24px var(--neu-light);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      14px 14px 28px var(--neu-dark),
+      -14px -14px 28px var(--neu-light);
+  }
+
+  .stat-label {
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--dash-muted);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .stat-label::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--mcd-yellow), var(--mcd-red));
+    display: inline-block;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--mcd-red);
+    text-shadow: 1px 1px 0 var(--neu-light);
+  }
+
+  .stat-sub {
+    align-self: flex-start;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--dash-muted);
+    padding: 5px 12px;
+    border-radius: 10px;
+    background: var(--neu-bg);
+    box-shadow:
+      inset 3px 3px 6px var(--neu-dark),
+      inset -3px -3px 6px var(--neu-light);
+  }
+
+  /* 2-Column Dashboard Grid */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .card {
+    background: var(--neu-bg);
+    border-radius: 26px;
+    padding: 26px 28px;
+    box-sizing: border-box;
+    box-shadow:
+      12px 12px 24px var(--neu-dark),
+      -12px -12px 24px var(--neu-light);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    overflow-x: auto;
+  }
+
+  .card h2 {
+    margin: 0 0 20px;
+    font-size: 19px;
+    font-weight: 800;
+    color: var(--dash-ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card h2::before {
+    content: '';
+    width: 6px;
+    height: 18px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--mcd-yellow), var(--mcd-red));
+    display: inline-block;
+  }
+
+  /* Recessed Canvas Wrapper look */
+  #salesTrendChart {
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--neu-bg);
+    box-sizing: border-box;
+    box-shadow:
+      inset 5px 5px 10px var(--neu-dark),
+      inset -5px -5px 10px var(--neu-light);
+  }
+
+  /* Soft UI Pill Tables */
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 9px;
+    font-size: 14px;
+  }
+
+  .table thead th {
+    text-align: left;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--dash-muted);
+    padding: 0 12px 4px;
+  }
+
+  .table tbody tr td {
+    background: var(--neu-bg);
+    padding: 12px;
+    color: var(--dash-ink);
+    box-shadow:
+      inset 3px 3px 6px var(--neu-dark),
+      inset -3px -3px 6px var(--neu-light);
+  }
+
+  .table tbody tr td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    font-weight: 700;
+  }
+
+  .table tbody tr td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
+  /* Low Stock & Out-of-Stock Row Highlights */
+  .table tbody tr.row-warning td {
+    background: linear-gradient(90deg, rgba(255, 199, 44, 0.16), rgba(255, 199, 44, 0.05));
+    color: #8A5A00;
+    font-weight: 700;
+    box-shadow:
+      inset 3px 3px 6px rgba(190, 140, 20, 0.16),
+      inset -3px -3px 6px var(--neu-light);
+  }
+
+  .table tbody tr.row-warning td:first-child {
+    border-left: 4px solid var(--mcd-yellow);
+  }
+
+  .table tbody tr.row-danger td {
+    background: linear-gradient(90deg, rgba(218, 41, 28, 0.14), rgba(218, 41, 28, 0.04));
+    color: var(--mcd-dark-red);
+    font-weight: 700;
+    box-shadow:
+      inset 3px 3px 6px rgba(218, 41, 28, 0.18),
+      inset -3px -3px 6px var(--neu-light);
+  }
+
+  .table tbody tr.row-danger td:first-child {
+    border-left: 4px solid var(--mcd-red);
+  }
+
+  /* Receipt Links in Recent Transactions */
+  .table tbody td a {
+    display: inline-block;
+    color: var(--mcd-red);
+    font-weight: 800;
+    text-decoration: none;
+    padding: 4px 10px;
+    border-radius: 9px;
+    background: var(--neu-bg);
+    box-shadow:
+      3px 3px 6px var(--neu-dark),
+      -3px -3px 6px var(--neu-light);
+    transition: all 0.18s ease;
+  }
+
+  .table tbody td a:hover {
+    transform: translateY(-1px);
+    box-shadow:
+      4px 4px 8px var(--neu-dark),
+      -4px -4px 8px var(--neu-light);
+  }
+
+  .table tbody td a:active {
+    box-shadow:
+      inset 2px 2px 5px var(--neu-dark),
+      inset -2px -2px 5px var(--neu-light);
+  }
+
+  .muted {
+    margin: 0;
+    padding: 18px;
+    border-radius: 14px;
+    color: var(--dash-muted);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    background: var(--neu-bg);
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark),
+      inset -4px -4px 8px var(--neu-light);
+  }
+
+  @media (max-width: 960px) {
+    .grid-2 {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 540px) {
+    .card,
+    .stat-card {
+      padding: 20px 18px;
+      border-radius: 22px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+    }
+  }
+</style>
+
+<main class="container">
+  <h1 style="display:flex;align-items:center;gap:.5rem"><img src="/img/mcdonalds-logo.png" alt="McDonald's logo" style="height:1.6em" onerror="this.style.display='none'"> McDonald's</h1>
+
+  <div class="stat-row">
+    <div class="stat-card">
+      <div class="stat-label">Today</div>
+      <div class="stat-value"><%= peso(todayTotal.total) %></div>
+      <div class="stat-sub"><%= todayTotal.count %> transaction<%= todayTotal.count === 1 ? '' : 's' %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Last 7 Days</div>
+      <div class="stat-value"><%= peso(weekTotal.total) %></div>
+      <div class="stat-sub"><%= weekTotal.count %> transaction<%= weekTotal.count === 1 ? '' : 's' %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">This Month</div>
+      <div class="stat-value"><%= peso(monthTotal.total) %></div>
+      <div class="stat-sub"><%= monthTotal.count %> transaction<%= monthTotal.count === 1 ? '' : 's' %></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Sales Trend (7 days)</h2>
+      <canvas id="salesTrendChart" height="220" data-trend="<%- JSON.stringify(trendData || []) %>"></canvas>
+    </div>
+
+    <div class="card">
+      <h2>Top Products (30 days)</h2>
+      <% if (topProducts.length === 0) { %>
+        <p class="muted">No sales recorded yet.</p>
+      <% } else { %>
+        <table class="table">
+          <thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead>
+          <tbody>
+            <% topProducts.forEach(p => { %>
+              <tr>
+                <td><%= p.product_name %></td>
+                <td><%= p.units_sold %></td>
+                <td><%= peso(p.revenue) %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h2>Low Stock Alerts</h2>
+      <% if (lowStock.length === 0) { %>
+        <p class="muted">All products are sufficiently stocked.</p>
+      <% } else { %>
+        <table class="table">
+          <thead><tr><th>Product</th><th>Stock</th><th>Reorder Level</th></tr></thead>
+          <tbody>
+            <% lowStock.forEach(p => { %>
+              <tr class="<%= p.stock_quantity === 0 ? 'row-danger' : 'row-warning' %>">
+                <td><%= p.name %></td>
+                <td><%= p.stock_quantity %> <%= p.unit %></td>
+                <td><%= p.reorder_level %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+
+    <div class="card">
+      <h2>Recent Transactions</h2>
+      <% if (recentSales.length === 0) { %>
+        <p class="muted">No transactions yet.</p>
+      <% } else { %>
+        <table class="table">
+          <thead><tr><th>Receipt</th><th>Cashier</th><th>Total</th><th>When</th></tr></thead>
+          <tbody>
+            <% recentSales.forEach(s => { %>
+              <tr>
+                <td><a href="/admin/sales/<%= s.id %>"><%= s.receipt_no %></a></td>
+                <td><%= s.cashier %></td>
+                <td><%= peso(s.total_amount) %></td>
+                <td><%= s.created_at %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</main>
+
+<script src="/js/vendor/chart.umd.min.js"></script>
+<script>
+  const ctx = document.getElementById('salesTrendChart');
+  const trendData = ctx ? JSON.parse(ctx.dataset.trend || '[]') : [];
+
+  if (ctx) {
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: trendData.map(d => (d.day || '').slice(5)),
+        datasets: [{
+          label: 'Sales (₱)',
+          data: trendData.map(d => Number(d.total) || 0),
+          borderColor: '#2b6cb0',
+          backgroundColor: 'rgba(43, 108, 176, 0.15)',
+          tension: 0.3,
+          fill: true,
+        }],
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: { y: { beginAtZero: true } },
+      },
+    });
+  }
+</script>
+<%- include('../partials/foot') %>

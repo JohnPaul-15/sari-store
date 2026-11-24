@@ -1,0 +1,326 @@
+<%- include('../partials/head') %>
+<%- include('../partials/nav') %>
+
+<style>
+  :root {
+    --rcp-accent: #D94E28;
+    --rcp-accent-dark: #B53A19;
+    --rcp-warm: #F5A623;
+    --rcp-success: #2A8C55;
+    --rcp-ink: #272320;
+    --rcp-muted: #6E6761;
+    --neu-bg: #F4EFE8;
+    --neu-dark: #D6CFC4;
+    --neu-light: #FFFFFF;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--neu-bg);
+    color: var(--rcp-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main.container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 36px 20px 60px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Extruded Neumorphic Receipt Card */
+  .card.receipt {
+    width: 100%;
+    background: var(--neu-bg);
+    border-radius: 28px;
+    padding: 34px 32px;
+    box-sizing: border-box;
+    box-shadow:
+      14px 14px 28px var(--neu-dark),
+      -14px -14px 28px var(--neu-light);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+  }
+
+  .card.receipt h1 {
+    margin: 0 0 22px;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: var(--rcp-accent);
+    text-shadow: 1px 1px 0 var(--neu-light);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card.receipt h1::before {
+    content: '';
+    width: 7px;
+    height: 26px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--rcp-warm), var(--rcp-accent));
+    display: inline-block;
+  }
+
+  /* Recessed Metadata Strip */
+  .card.receipt > p {
+    margin: 0 0 12px;
+    padding: 11px 16px;
+    border-radius: 14px;
+    background: var(--neu-bg);
+    font-size: 14px;
+    color: var(--rcp-ink);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark),
+      inset -4px -4px 8px var(--neu-light);
+  }
+
+  .card.receipt > p strong {
+    color: var(--rcp-muted);
+    font-weight: 700;
+  }
+
+  /* Itemized Receipt Table */
+  .card.receipt .table {
+    width: 100%;
+    margin-top: 22px;
+    border-collapse: separate;
+    border-spacing: 0 9px;
+    font-size: 14px;
+  }
+
+  .card.receipt .table thead th {
+    text-align: left;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+    color: var(--rcp-muted);
+    padding: 0 12px 4px;
+  }
+
+  .card.receipt .table thead th:nth-child(2),
+  .card.receipt .table thead th:nth-child(3),
+  .card.receipt .table thead th:nth-child(4) {
+    text-align: right;
+  }
+
+  .card.receipt .table tbody tr td {
+    background: var(--neu-bg);
+    padding: 12px;
+    color: var(--rcp-ink);
+    box-shadow:
+      inset 3px 3px 6px var(--neu-dark),
+      inset -3px -3px 6px var(--neu-light);
+  }
+
+  .card.receipt .table tbody tr td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    font-weight: 700;
+  }
+
+  .card.receipt .table tbody tr td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    font-weight: 700;
+  }
+
+  .card.receipt .table tbody tr td:nth-child(2),
+  .card.receipt .table tbody tr td:nth-child(3),
+  .card.receipt .table tbody tr td:nth-child(4) {
+    text-align: right;
+  }
+
+  /* Summary Footer Rows */
+  .card.receipt .table tfoot tr td {
+    padding: 12px 14px;
+    background: var(--neu-bg);
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--rcp-muted);
+    box-shadow:
+      inset 3px 3px 7px var(--neu-dark),
+      inset -3px -3px 7px var(--neu-light);
+  }
+
+  .card.receipt .table tfoot tr td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+
+  .card.receipt .table tfoot tr td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    text-align: right;
+    color: var(--rcp-ink);
+    font-weight: 800;
+  }
+
+  .card.receipt .table tfoot tr:first-child td {
+    font-size: 16px;
+    color: var(--rcp-ink);
+  }
+
+  .card.receipt .table tfoot tr:first-child td:last-child {
+    color: var(--rcp-accent);
+    font-size: 17px;
+  }
+
+  .card.receipt .table tfoot tr:last-child td:last-child {
+    color: var(--rcp-success);
+  }
+
+  /* Action Buttons */
+  .receipt-actions {
+    margin-top: 26px;
+    display: flex;
+    gap: 14px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+  }
+
+  .receipt-actions .btn {
+    padding: 13px 22px;
+    border-radius: 14px;
+    border: none;
+    font-family: inherit;
+    font-size: 14.5px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+
+  .receipt-actions .btn-secondary {
+    background: var(--neu-bg);
+    color: var(--rcp-ink);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+      6px 6px 12px var(--neu-dark),
+      -6px -6px 12px var(--neu-light);
+  }
+
+  .receipt-actions .btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      8px 8px 16px var(--neu-dark),
+      -8px -8px 16px var(--neu-light);
+  }
+
+  .receipt-actions .btn-secondary:active {
+    transform: translateY(1px) scale(0.985);
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark),
+      inset -4px -4px 8px var(--neu-light);
+  }
+
+  .receipt-actions .btn-primary {
+    background: linear-gradient(135deg, #E65C35 0%, var(--rcp-accent) 100%);
+    color: #FFFFFF;
+    box-shadow:
+      6px 6px 14px rgba(181, 58, 25, 0.28),
+      -5px -5px 12px var(--neu-light);
+  }
+
+  .receipt-actions .btn-primary:hover {
+    background: linear-gradient(135deg, #F0663E 0%, var(--rcp-accent-dark) 100%);
+    transform: translateY(-2px);
+    box-shadow:
+      8px 8px 18px rgba(181, 58, 25, 0.35),
+      -5px -5px 12px var(--neu-light);
+  }
+
+  .receipt-actions .btn-primary:active {
+    transform: translateY(1px) scale(0.985);
+    box-shadow:
+      inset 4px 4px 8px rgba(115, 28, 7, 0.45),
+      inset -3px -3px 7px rgba(255, 145, 110, 0.35);
+  }
+
+  @media (max-width: 540px) {
+    .card.receipt {
+      padding: 24px 18px;
+      border-radius: 22px;
+    }
+
+    .card.receipt > p {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .receipt-actions {
+      flex-direction: column;
+    }
+
+    .receipt-actions .btn {
+      width: 100%;
+    }
+  }
+
+  @media print {
+    body {
+      background: #FFFFFF;
+    }
+
+    .card.receipt {
+      box-shadow: none;
+      border: 1px solid #E5E5E5;
+      padding: 16px;
+    }
+
+    .card.receipt > p,
+    .card.receipt .table tbody tr td,
+    .card.receipt .table tfoot tr td {
+      box-shadow: none;
+      background: #FFFFFF;
+    }
+
+    .receipt-actions {
+      display: none;
+    }
+  }
+</style>
+
+<main class="container">
+  <div class="card receipt">
+    <h1>Receipt</h1>
+    <p><strong>Receipt No:</strong> <%= sale.receipt_no %></p>
+    <p><strong>Date:</strong> <%= sale.created_at %></p>
+    <table class="table">
+      <thead><tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
+      <tbody>
+        <% items.forEach(i => { %>
+          <tr>
+            <td><%= i.product_name %></td>
+            <td><%= peso(i.unit_price) %></td>
+            <td><%= i.quantity %></td>
+            <td><%= peso(i.subtotal) %></td>
+          </tr>
+        <% }) %>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="3">Total</td><td><%= peso(sale.total_amount) %></td></tr>
+        <tr><td colspan="3">Amount Paid</td><td><%= peso(sale.amount_paid) %></td></tr>
+        <tr><td colspan="3">Change</td><td><%= peso(sale.change_amount) %></td></tr>
+      </tfoot>
+    </table>
+    <div class="receipt-actions">
+      <button onclick="window.print()" class="btn btn-secondary">Print</button>
+      <a href="/pos" class="btn btn-primary">New Sale</a>
+    </div>
+  </div>
+</main>
+<%- include('../partials/foot') %>

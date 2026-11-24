@@ -1,0 +1,40 @@
+<style>
+  .app-footer {
+    width: 100%;
+    padding: 24px 20px 36px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--sari-muted, #6E6761);
+  }
+
+  .app-footer::before {
+    content: '';
+    display: none;
+  }
+
+  .app-footer {
+    max-width: 420px;
+    margin: 12px auto 32px;
+    padding: 12px 24px;
+    border-radius: 16px;
+    background: var(--neu-bg, #F4EFE8);
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark, #D6CFC4),
+      inset -4px -4px 8px var(--neu-light, #FFFFFF);
+  }
+
+  @media print {
+    .app-footer {
+      display: none !important;
+    }
+  }
+</style>
+
+<footer class="app-footer">&copy; 2026 John Paul (SorSU)</footer>
+</body>
+</html>

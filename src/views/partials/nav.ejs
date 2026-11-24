@@ -1,0 +1,212 @@
+<style>
+  :root {
+    --nav-accent: #D94E28;
+    --nav-accent-dark: #B53A19;
+    --nav-warm: #F5A623;
+    --nav-success: #2A8C55;
+    --nav-ink: #272320;
+    --nav-muted: #6E6761;
+    --neu-bg: #F4EFE8;
+    --neu-dark: #D6CFC4;
+    --neu-light: #FFFFFF;
+  }
+
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    padding: 14px 24px;
+    background: var(--neu-bg);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-sizing: border-box;
+    box-shadow:
+      0 8px 20px rgba(214, 207, 196, 0.75),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.7);
+  }
+
+  .topbar-brand {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    color: var(--nav-accent);
+    text-shadow: 1px 1px 0 var(--neu-light);
+    padding: 9px 16px;
+    border-radius: 16px;
+    background: var(--neu-bg);
+    box-shadow:
+      5px 5px 10px var(--neu-dark),
+      -5px -5px 10px var(--neu-light);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .topbar-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-nav a {
+    text-decoration: none;
+    color: var(--nav-ink);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 14px;
+    background: var(--neu-bg);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow:
+      5px 5px 10px var(--neu-dark),
+      -5px -5px 10px var(--neu-light);
+    transition: all 0.2s ease;
+  }
+
+  .topbar-nav a:hover {
+    color: var(--nav-accent);
+    transform: translateY(-2px);
+    box-shadow:
+      7px 7px 14px var(--neu-dark),
+      -7px -7px 14px var(--neu-light);
+  }
+
+  .topbar-nav a:active {
+    transform: translateY(1px) scale(0.985);
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark),
+      inset -4px -4px 8px var(--neu-light);
+  }
+
+  .topbar-user {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .topbar-user > span {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--nav-muted);
+    padding: 9px 15px;
+    border-radius: 14px;
+    background: var(--neu-bg);
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark),
+      inset -4px -4px 8px var(--neu-light);
+  }
+
+  .inline-form {
+    margin: 0;
+    display: inline-flex;
+  }
+
+  .link-button {
+    border: none;
+    border-radius: 14px;
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #FFFFFF;
+    background: linear-gradient(135deg, #E65C35 0%, var(--nav-accent) 100%);
+    box-shadow:
+      5px 5px 11px rgba(181, 58, 25, 0.26),
+      -4px -4px 10px var(--neu-light);
+    transition: all 0.2s ease;
+  }
+
+  .link-button:hover {
+    background: linear-gradient(135deg, #F0663E 0%, var(--nav-accent-dark) 100%);
+    transform: translateY(-2px);
+    box-shadow:
+      7px 7px 15px rgba(181, 58, 25, 0.34),
+      -4px -4px 10px var(--neu-light);
+  }
+
+  .link-button:active {
+    transform: translateY(1px) scale(0.985);
+    box-shadow:
+      inset 3px 3px 7px rgba(115, 28, 7, 0.45),
+      inset -3px -3px 6px rgba(255, 145, 110, 0.35);
+  }
+
+  /* Flash Alerts below Topbar */
+  .topbar + .alert,
+  .topbar + .alert + .alert {
+    max-width: 1140px;
+    margin: 18px auto 0;
+    padding: 13px 18px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 700;
+    background: var(--neu-bg);
+    box-sizing: border-box;
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark),
+      inset -4px -4px 8px var(--neu-light);
+  }
+
+  .alert-success {
+    color: var(--nav-success);
+    border-left: 4px solid var(--nav-success);
+  }
+
+  .alert-error {
+    color: var(--nav-accent-dark);
+    border-left: 4px solid var(--nav-accent);
+  }
+
+  @media (max-width: 768px) {
+    .topbar {
+      padding: 14px 16px;
+      justify-content: center;
+    }
+
+    .topbar-nav,
+    .topbar-user {
+      justify-content: center;
+    }
+  }
+
+  @media print {
+    .topbar,
+    .alert {
+      display: none !important;
+    }
+  }
+</style>
+
+<header class="topbar">
+  <div class="topbar-brand">🏪 Sari-Sari POS</div>
+  <nav class="topbar-nav">
+    <% if (currentUser && currentUser.role === 'admin') { %>
+      <a href="/admin/dashboard">Dashboard</a>
+      <a href="/admin/products">Products</a>
+      <a href="/admin/sales">Sales</a>
+      <a href="/admin/inventory-reports">Inventory Reports</a>
+      <a href="/admin/users">Users</a>
+    <% } else if (currentUser && currentUser.role === 'sales_rep') { %>
+      <a href="/pos">Point of Sale</a>
+      <a href="/pos/inventory">Inventory</a>
+    <% } %>
+  </nav>
+  <div class="topbar-user">
+    <% if (currentUser) { %>
+      <span><%= currentUser.fullName %> (<%= currentUser.role === 'admin' ? 'Admin' : 'Sales Rep' %>)</span>
+      <form method="POST" action="/logout" class="inline-form">
+        <button type="submit" class="link-button">Logout</button>
+      </form>
+    <% } %>
+  </div>
+</header>
+<% if (flash && flash.success) { %><div class="alert alert-success"><%= flash.success %></div><% } %>
+<% if (flash && flash.error) { %><div class="alert alert-error"><%= flash.error %></div><% } %>

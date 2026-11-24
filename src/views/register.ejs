@@ -1,0 +1,296 @@
+<%- include('partials/head') %>
+
+<style>
+  :root {
+    --sari-accent: #D94E28;
+    --sari-accent-dark: #B53A19;
+    --sari-warm: #F5A623;
+    --sari-ink: #272320;
+    --sari-muted: #6E6761;
+    --neu-bg: #F4EFE8;
+    --neu-dark: #D6CFC4;
+    --neu-light: #FFFFFF;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--neu-bg);
+    color: var(--sari-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .login-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 36px 20px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Soft ambient glow orbs */
+  .login-page::before {
+    content: '';
+    position: absolute;
+    top: -110px;
+    right: -110px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(245, 166, 35, 0.25) 0%, rgba(245, 166, 35, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .login-page::after {
+    content: '';
+    position: absolute;
+    bottom: -120px;
+    left: -120px;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(circle, rgba(217, 78, 40, 0.16) 0%, rgba(217, 78, 40, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Extruded Neumorphic Card */
+  .login-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 450px;
+    padding: 36px 34px;
+    border-radius: 28px;
+    background: var(--neu-bg);
+    box-shadow:
+      14px 14px 28px var(--neu-dark),
+      -14px -14px 28px var(--neu-light);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .login-card h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: -0.4px;
+    color: var(--sari-accent);
+    text-shadow: 1px 1px 0 var(--neu-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .login-card .muted {
+    margin: 0;
+    color: var(--sari-muted);
+    font-size: 14px;
+    line-height: 1.45;
+  }
+
+  .login-card p.muted:first-of-type {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    margin-top: -6px;
+    margin-bottom: 4px;
+  }
+
+  .login-card p.muted:first-of-type::before {
+    content: '';
+    width: 6px;
+    height: 16px;
+    border-radius: 4px;
+    background: linear-gradient(180deg, var(--sari-warm), var(--sari-accent));
+    display: inline-block;
+  }
+
+  /* Recessed Neumorphic Error Alert */
+  .login-card .alert-error {
+    background: var(--neu-bg);
+    color: var(--sari-accent-dark);
+    border-left: 4px solid var(--sari-accent);
+    padding: 12px 15px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+    box-shadow:
+      inset 4px 4px 8px var(--neu-dark),
+      inset -4px -4px 8px var(--neu-light);
+  }
+
+  .login-card > label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--sari-ink);
+    padding-left: 3px;
+  }
+
+  .login-card > label[hidden] {
+    display: none;
+  }
+
+  /* Pressed / Inset Neumorphic Inputs & Select */
+  .login-card input,
+  .login-card select {
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    background: var(--neu-bg);
+    color: var(--sari-ink);
+    font-family: inherit;
+    font-size: 14.5px;
+    box-sizing: border-box;
+    outline: none;
+    transition: all 0.22s ease;
+    box-shadow:
+      inset 5px 5px 10px var(--neu-dark),
+      inset -5px -5px 10px var(--neu-light);
+  }
+
+  .login-card select {
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+    padding-right: 40px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%236E6761' viewBox='0 0 16 16'%3E%3Cpath d='M4.427 6.427a.6.6 0 0 1 .848 0L8 9.152l2.725-2.725a.6.6 0 1 1 .848.849l-3.15 3.149a.6.6 0 0 1-.848 0l-3.15-3.15a.6.6 0 0 1 0-.848z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+  }
+
+  .login-card input:focus,
+  .login-card select:focus {
+    border-color: rgba(245, 166, 35, 0.8);
+    box-shadow:
+      inset 3px 3px 7px var(--neu-dark),
+      inset -3px -3px 7px var(--neu-light),
+      0 0 0 3px rgba(245, 166, 35, 0.22);
+  }
+
+  /* Tactile Primary CTA Button */
+  .login-card .btn-block {
+    width: 100%;
+    padding: 14px 18px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #E65C35 0%, var(--sari-accent) 100%);
+    color: #FFFFFF;
+    font-size: 15.5px;
+    font-weight: 700;
+    letter-spacing: 0.25px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow:
+      6px 6px 14px rgba(181, 58, 25, 0.28),
+      -5px -5px 12px var(--neu-light);
+  }
+
+  .login-card .btn-block:hover {
+    background: linear-gradient(135deg, #F0663E 0%, var(--sari-accent-dark) 100%);
+    transform: translateY(-2px);
+    box-shadow:
+      8px 8px 18px rgba(181, 58, 25, 0.35),
+      -5px -5px 12px var(--neu-light);
+  }
+
+  .login-card .btn-block:active {
+    transform: translateY(1px) scale(0.985);
+    box-shadow:
+      inset 4px 4px 8px rgba(115, 28, 7, 0.45),
+      inset -3px -3px 7px rgba(255, 145, 110, 0.35);
+  }
+
+  .login-card a {
+    color: var(--sari-accent);
+    font-weight: 700;
+    text-decoration: none;
+    padding: 3px 8px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .login-card a:hover {
+    background: var(--neu-bg);
+    box-shadow:
+      3px 3px 6px var(--neu-dark),
+      -3px -3px 6px var(--neu-light);
+  }
+
+  @media (max-width: 480px) {
+    .login-card {
+      padding: 26px 20px;
+      border-radius: 22px;
+      box-shadow:
+        8px 8px 18px var(--neu-dark),
+        -8px -8px 18px var(--neu-light);
+    }
+  }
+</style>
+
+<div class="login-page">
+  <form method="POST" action="/register" class="login-card">
+    <h1>🏪 Sari-Sari POS</h1>
+    <p class="muted">Create an account</p>
+    <% if (flash && flash.error) { %><div class="alert alert-error"><%= flash.error %></div><% } %>
+
+    <label>Full Name
+      <input type="text" name="full_name" required autofocus />
+    </label>
+    <label>Username
+      <input type="text" name="username" required />
+    </label>
+    <label>Password
+      <input type="password" name="password" required minlength="6" />
+    </label>
+    <label>Confirm Password
+      <input type="password" name="confirm_password" required minlength="6" />
+    </label>
+    <label>Account Type
+      <select name="role" id="roleSelect">
+        <option value="sales_rep">Sales Representative (Cashier)</option>
+        <% if (adminSignupEnabled) { %><option value="admin">Admin</option><% } %>
+      </select>
+    </label>
+    <label id="adminCodeField" hidden>Admin Setup Code
+      <input type="text" name="admin_code" id="adminCodeInput" autocomplete="off" />
+    </label>
+    <% if (!adminSignupEnabled) { %>
+      <p class="muted" style="font-size: 0.8rem; margin: -0.5rem 0 0;">
+        Admin self-registration is currently disabled. New admins must be created from the Admin &gt; Users page.
+      </p>
+    <% } %>
+
+    <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+    <p class="muted" style="text-align: center; margin: 0;">
+      Already have an account? <a href="/login">Login</a>
+    </p>
+  </form>
+</div>
+<script>
+  const roleSelect = document.getElementById('roleSelect');
+  const adminCodeField = document.getElementById('adminCodeField');
+  const adminCodeInput = document.getElementById('adminCodeInput');
+  function syncAdminCodeField() {
+    const isAdmin = roleSelect.value === 'admin';
+    adminCodeField.hidden = !isAdmin;
+    adminCodeInput.required = isAdmin;
+  }
+  roleSelect.addEventListener('change', syncAdminCodeField);
+  syncAdminCodeField();
+</script>
+<%- include('partials/foot') %>
